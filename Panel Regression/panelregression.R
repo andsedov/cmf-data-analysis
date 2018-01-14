@@ -1,25 +1,25 @@
-library(plm)
+п»їlibrary(plm)
 
 data(EmplUK)
 head(EmplUK)
 
-#Статические модели
+#РЎС‚Р°С‚РёС‡РµСЃРєРёРµ РјРѕРґРµР»Рё
 
 model.formula<-log(emp) ~ log(wage) + log(capital)
 
-##Объединенная регрессия
+##РћР±СЉРµРґРёРЅРµРЅРЅР°СЏ СЂРµРіСЂРµСЃСЃРёСЏ
 empl.ls<-plm(model.formula,data=EmplUK, index=c("firm","year"), model="pooling", effect="individual")
 summary(empl.ls)
 
-##Фиксированные эффекты
+##Р¤РёРєСЃРёСЂРѕРІР°РЅРЅС‹Рµ СЌС„С„РµРєС‚С‹
 empl.ls<-plm(model.formula,data=EmplUK, index=c("firm","year"), model="within", effect="individual")
 summary(empl.ls)
 
-##Случайные эффекты
+##РЎР»СѓС‡Р°Р№РЅС‹Рµ СЌС„С„РµРєС‚С‹
 empl.ls<-plm(model.formula,data=EmplUK, index=c("firm","year"), model="random", effect="individual")
 summary(empl.ls)
 
-##Объединенная регрессия дает лучший результат r-squared и rss
+##РћР±СЉРµРґРёРЅРµРЅРЅР°СЏ СЂРµРіСЂРµСЃСЃРёСЏ РґР°РµС‚ Р»СѓС‡С€РёР№ СЂРµР·СѓР»СЊС‚Р°С‚ r-squared Рё rss
 
 pooltest(model.formula,data=EmplUK, index=c("firm","year"), model="within", effect="individual")
 
@@ -27,7 +27,7 @@ plmtest(model.formula,data=EmplUK, index=c("firm","year"), effect="individual", 
 
 phtest(model.formula,data=EmplUK, index=c("firm","year"), model=c("within","random"), effect="individual")
 
-#Динамическая модель
+#Р”РёРЅР°РјРёС‡РµСЃРєР°СЏ РјРѕРґРµР»СЊ
 ar.model<-dynformula(log(emp) ~ log(wage) + log(capital),lag.form=list(1,0,0))
 empl.argmm<-pgmm(ar.model,data=EmplUK,index=c("firm","year"),gmm.inst=~log(emp) ~ log(wage) + log(capital))
 summary(empl.argmm)

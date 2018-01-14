@@ -1,43 +1,43 @@
-train <- read.csv('C:\\Users\\asedov001\\Documents\\CMF\\Anomaly Detection\\AD_comp_train.csv')
+ï»¿train <- read.csv('~\AD_comp_train.csv')
 X <- train[c('X', 'X.1')]
 y <- train['y']
 plot (train$X, train$X.1, col=ifelse(train$y<1, 'black', 'red'))
 
 m <- nrow(X)
-# íîìåğà «àíîìàëüíûõ» íàáëşäåíèé
+# Ğ½Ğ¾Ğ¼ĞµÑ€Ğ° Â«Ğ°Ğ½Ğ¾Ğ¼Ğ°Ğ»ÑŒĞ½Ñ‹Ñ…Â» Ğ½Ğ°Ğ±Ğ»ÑĞ´ĞµĞ½Ğ¸Ğ¹
 anom.obs<-(1:m)[y==1] 
 la <- length(anom.obs)
 m.cv <- round(0.2*(m-la)) + la 
 m.train<- m-m.cv
-# íîìåğà ıêçàìåíóşùåé è îáó÷àşùåé âûáîğîê
+# Ğ½Ğ¾Ğ¼ĞµÑ€Ğ° ÑĞºĞ·Ğ°Ğ¼ĞµĞ½ÑƒÑÑ‰ĞµĞ¹ Ğ¸ Ğ¾Ğ±ÑƒÑ‡Ğ°ÑÑ‰ĞµĞ¹ Ğ²Ñ‹Ğ±Ğ¾Ñ€Ğ¾Ğº
 cv.obs <- c(sample((1:m)[-anom.obs], size=m.cv-la, replace=FALSE), anom.obs)
 
 train.obs<-(1:m)[-cv.obs]
-# ğàçäåëåíèå âûáîğêè
+# Ñ€Ğ°Ğ·Ğ´ĞµĞ»ĞµĞ½Ğ¸Ğµ Ğ²Ñ‹Ğ±Ğ¾Ñ€ĞºĞ¸
 X.train <- X[train.obs,] 
 X.cv <- X[cv.obs,]
 y.train<-y[train.obs,]
 y.cv <-y[cv.obs,]
 
-# îöåíêè ïàğàìåòğîâ
+# Ğ¾Ñ†ĞµĞ½ĞºĞ¸ Ğ¿Ğ°Ñ€Ğ°Ğ¼ĞµÑ‚Ñ€Ğ¾Ğ²
 mu <-apply(X.train, 2, mean)
 sigma <-apply(X.train, 2, sd)
-# ôóíêöèÿ «âåğîÿòíîñòè»
+# Ñ„ÑƒĞ½ĞºÑ†Ğ¸Ñ Â«Ğ²ĞµÑ€Ğ¾ÑÑ‚Ğ½Ğ¾ÑÑ‚Ğ¸Â»
 p <-function(X,mu,sigma) {
   m <-nrow(X); n <-ncol(X)
   prob<-matrix(nrow=m,ncol=n)
   for (j in 1:n) prob[,j] <-dnorm(X[,j],mu[j],sigma[j])
   apply(prob, 1, prod)
 }
-# îïğåäåëåíèå «âåğîÿòíîñòåé»
+# Ğ¾Ğ¿Ñ€ĞµĞ´ĞµĞ»ĞµĞ½Ğ¸Ğµ Â«Ğ²ĞµÑ€Ğ¾ÑÑ‚Ğ½Ğ¾ÑÑ‚ĞµĞ¹Â»
 prob.train<-p(X.train,mu,sigma)
 prob.cv <-p(X.cv,mu,sigma)
 
 
-pr<-range(prob.cv) # ãğàíèöû âîçìîæíûõ çíà÷åíèé ????
-res <-NULL# â íå¸ áóäóò ñîõğàíÿòüñÿ ğåçóëüòàòû ìîäåëèğîâàíèÿ
-# äëÿ êàæäîãî íàáëşäåíèÿ ıêçàìåíóşùåé âûáîğêè ğàññ÷èòûâàåì
-# ïğîãíîç ïğè îïğåäåë¸ííîì çíà÷åíèè è ñğàâíèâàåì åãî ñ ôàêòîì
+pr<-range(prob.cv) # Ğ³Ñ€Ğ°Ğ½Ğ¸Ñ†Ñ‹ Ğ²Ğ¾Ğ·Ğ¼Ğ¾Ğ¶Ğ½Ñ‹Ñ… Ğ·Ğ½Ğ°Ñ‡ĞµĞ½Ğ¸Ğ¹ 
+res <-NULL# Ğ² Ğ½ĞµÑ‘ Ğ±ÑƒĞ´ÑƒÑ‚ ÑĞ¾Ñ…Ñ€Ğ°Ğ½ÑÑ‚ÑŒÑÑ Ñ€ĞµĞ·ÑƒĞ»ÑŒÑ‚Ğ°Ñ‚Ñ‹ Ğ¼Ğ¾Ğ´ĞµĞ»Ğ¸Ñ€Ğ¾Ğ²Ğ°Ğ½Ğ¸Ñ
+# Ğ´Ğ»Ñ ĞºĞ°Ğ¶Ğ´Ğ¾Ğ³Ğ¾ Ğ½Ğ°Ğ±Ğ»ÑĞ´ĞµĞ½Ğ¸Ñ ÑĞºĞ·Ğ°Ğ¼ĞµĞ½ÑƒÑÑ‰ĞµĞ¹ Ğ²Ñ‹Ğ±Ğ¾Ñ€ĞºĞ¸ Ñ€Ğ°ÑÑÑ‡Ğ¸Ñ‚Ñ‹Ğ²Ğ°ĞµĞ¼
+# Ğ¿Ñ€Ğ¾Ğ³Ğ½Ğ¾Ğ· Ğ¿Ñ€Ğ¸ Ğ¾Ğ¿Ñ€ĞµĞ´ĞµĞ»Ñ‘Ğ½Ğ½Ğ¾Ğ¼ Ğ·Ğ½Ğ°Ñ‡ĞµĞ½Ğ¸Ğ¸ Ğ¸ ÑÑ€Ğ°Ğ²Ğ½Ğ¸Ğ²Ğ°ĞµĞ¼ ĞµĞ³Ğ¾ Ñ Ñ„Ğ°ĞºÑ‚Ğ¾Ğ¼
 
 #df <- data.frame(act=y.cv,prd=y.pred)
 #precision <- nrow(df[df$prd==0 & df$act==0,])/(nrow(df[df$prd==0 & df$act==0,])+nrow(df[df$prd==0 & df$act==1,]))
@@ -60,11 +60,11 @@ for (eps in seq(pr[1], pr[2], length = 1000)) {
   res <-rbind(res, c(eps, fitStats(y.cv, y.pred)))
 }
 
-dimnames(res)[[2]][1] <- "epsilon" # çàãîëîâêè
-# âûáîğ íàèáîëåå ïîäõîäÿùåãî ????
+dimnames(res)[[2]][1] <- "epsilon" # Ğ·Ğ°Ğ³Ğ¾Ğ»Ğ¾Ğ²ĞºĞ¸
+# Ğ²Ñ‹Ğ±Ğ¾Ñ€ Ğ½Ğ°Ğ¸Ğ±Ğ¾Ğ»ĞµĞµ Ğ¿Ğ¾Ğ´Ñ…Ğ¾Ğ´ÑÑ‰ĞµĞ³Ğ¾
 j <- which.max(res[,"f1.score"])
 eps <- res[j,"epsilon"]
-# îêîí÷àòåëüíûé ïğîãíîç
+# Ğ¾ĞºĞ¾Ğ½Ñ‡Ğ°Ñ‚ĞµĞ»ÑŒĞ½Ñ‹Ğ¹ Ğ¿Ñ€Ğ¾Ğ³Ğ½Ğ¾Ğ·
 y.pred <-1 *(prob.cv < eps)
 y.pred
 
@@ -72,7 +72,7 @@ y.pred
 
 
 
-test <- read.csv('C:\\Users\\asedov001\\Documents\\CMF\\Anomaly Detection\\AD_comp_test.csv')
+test <- read.csv('~/AD_comp_test.csv')
 test
 #X.test <- test[c('X', 'X.1')]
 #y <- test['y']
@@ -81,7 +81,7 @@ plot (test$V1, test$V2)
 mu <-apply(test, 2, mean)
 sigma <-apply(test, 2, sd)
 prob.test<-p(test,mu,sigma)
-pr<-range(prob.test) # ãğàíèöû âîçìîæíûõ çíà÷åíèé ????
+pr<-range(prob.test) # Ğ³Ñ€Ğ°Ğ½Ğ¸Ñ†Ñ‹ Ğ²Ğ¾Ğ·Ğ¼Ğ¾Ğ¶Ğ½Ñ‹Ñ… Ğ·Ğ½Ğ°Ñ‡ĞµĞ½Ğ¸Ğ¹
 res <-NULL
 
 for (eps in seq(pr[1], pr[2], length = 1000)) {
@@ -89,15 +89,15 @@ for (eps in seq(pr[1], pr[2], length = 1000)) {
   res <-rbind(res, c(eps, fitStats(y.cv, y.pred)))
 }
 
-dimnames(res)[[2]][1] <- "epsilon" # çàãîëîâêè
-# âûáîğ íàèáîëåå ïîäõîäÿùåãî ????
+dimnames(res)[[2]][1] <- "epsilon" # Ğ·Ğ°Ğ³Ğ¾Ğ»Ğ¾Ğ²ĞºĞ¸
+# Ğ²Ñ‹Ğ±Ğ¾Ñ€ Ğ½Ğ°Ğ¸Ğ±Ğ¾Ğ»ĞµĞµ Ğ¿Ğ¾Ğ´Ñ…Ğ¾Ğ´ÑÑ‰ĞµĞ³Ğ¾ 
 j <- which.max(res[,"f1.score"])
 eps <- res[j,"epsilon"]
-# îêîí÷àòåëüíûé ïğîãíîç
+# Ğ¾ĞºĞ¾Ğ½Ñ‡Ğ°Ñ‚ĞµĞ»ÑŒĞ½Ñ‹Ğ¹ Ğ¿Ñ€Ğ¾Ğ³Ğ½Ğ¾Ğ·
 y.pred <-1 *(prob.test < eps)
 y.pred
 result <- cbind(0:499, y.pred)
 
 # Set the working directory
-setwd("C:\\Users\\asedov001\\Documents\\CMF\\Anomaly Detection\\")
+setwd("~/")
 write.csv(result, file = "Anomaly.csv", row.names=FALSE)

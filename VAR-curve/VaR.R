@@ -1,32 +1,32 @@
-# Set the working directory
-setwd("C:\\Users\\asedov001\\Documents\\CMF\\VAR-curve\\")
+ï»¿# Set the working directory
+setwd("~/")
 
-data <- cbind(1:200, read.csv('C:\\Users\\asedov001\\Documents\\CMF\\VAR-curve\\returns.csv'))
+data <- cbind(1:200, read.csv('~/returns.csv'))
 r1 <- data['r1']
 T_r1 <- length(r1)-1
 print(r1)
 library(fBasics)
-plot(data$`1:200`,data$r1) # ãðàôèê
-basicStats(r1) # ñòàòèñòèêè
-histPlot(timeSeries(r1))# ãèñòîãðàììà
+plot(data$`1:200`,data$r1) # Ð³Ñ€Ð°Ñ„Ð¸Ðº
+basicStats(r1) # ÑÑ‚Ð°Ñ‚Ð¸ÑÑ‚Ð¸ÐºÐ¸
+histPlot(timeSeries(r1))# Ð³Ð¸ÑÑ‚Ð¾Ð³Ñ€Ð°Ð¼Ð¼Ð°
 acf(r1)
 
-qqnormPlot(r1) # ãðàôèê êâàíòèëü-êâàíòèëü
+qqnormPlot(r1) # Ð³Ñ€Ð°Ñ„Ð¸Ðº ÐºÐ²Ð°Ð½Ñ‚Ð¸Ð»ÑŒ-ÐºÐ²Ð°Ð½Ñ‚Ð¸Ð»ÑŒ
 jarqueberaTest(r1)
 
 library(ghyp)
 fit.ghypuv(r1,symmetric=FALSE,silent=TRUE)
 
 r1.ghyp <- fit.ghypuv(r1,symmetric=FALSE,silent=TRUE)
-hist(r1.ghyp) # ãèñòîãðàììà
-qqghyp(r1.ghyp) # ãðàôèê êâàíòèëü-êâàíòèëü
+hist(r1.ghyp) # Ð³Ð¸ÑÑ‚Ð¾Ð³Ñ€Ð°Ð¼Ð¼Ð°
+qqghyp(r1.ghyp) # Ð³Ñ€Ð°Ñ„Ð¸Ðº ÐºÐ²Ð°Ð½Ñ‚Ð¸Ð»ÑŒ-ÐºÐ²Ð°Ð½Ñ‚Ð¸Ð»ÑŒ
 
-aic.uv <-stepAIC.ghyp(r1,dist=c("gauss","t","ghyp"),symmetric=NULL,silent=TRUE)#êðèòåðèé Àêàèêå
-summary(aic.uv$best.model)# ñòàòèñòèêè ïî ìîäåëè
+aic.uv <-stepAIC.ghyp(r1,dist=c("gauss","t","ghyp"),symmetric=NULL,silent=TRUE)#ÐºÑ€Ð¸Ñ‚ÐµÑ€Ð¸Ð¹ ÐÐºÐ°Ð¸ÐºÐµ
+summary(aic.uv$best.model)# ÑÑ‚Ð°Ñ‚Ð¸ÑÑ‚Ð¸ÐºÐ¸ Ð¿Ð¾ Ð¼Ð¾Ð´ÐµÐ»Ð¸
 
 r1.t <- fit.tuv(r1,symmetric=TRUE,silent=TRUE)
-hist(r1.t) # ãèñòîãðàììà
-qqghyp(r1.t) # ãðàôèê êâàíòèëü-êâàíòèëü
+hist(r1.t) # Ð³Ð¸ÑÑ‚Ð¾Ð³Ñ€Ð°Ð¼Ð¼Ð°
+qqghyp(r1.t) # Ð³Ñ€Ð°Ñ„Ð¸Ðº ÐºÐ²Ð°Ð½Ñ‚Ð¸Ð»ÑŒ-ÐºÐ²Ð°Ð½Ñ‚Ð¸Ð»ÑŒ
 ?coredata
 alpha <- 0.0
 VaR_1 <-numeric()
@@ -72,7 +72,7 @@ VaR_Total <- cbind(0:299, VaR_Total)
 VaR_Total
 write.csv(VaR_Total, file = "VaR.csv", row.names=FALSE)
 
-aic.uv <-stepAIC.ghyp(r2,dist=c("gauss","t","ghyp"),symmetric=NULL,silent=TRUE)#êðèòåðèé Àêàèêå
-summary(aic.uv$best.model)# ñòàòèñòèêè ïî ìîäåëè
-aic.uv <-stepAIC.ghyp(r3,dist=c("gauss","t","ghyp"),symmetric=NULL,silent=TRUE)#êðèòåðèé Àêàèêå
-summary(aic.uv$best.model)# ñòàòèñòèêè ïî ìîäåëè
+aic.uv <-stepAIC.ghyp(r2,dist=c("gauss","t","ghyp"),symmetric=NULL,silent=TRUE)#ÐºÑ€Ð¸Ñ‚ÐµÑ€Ð¸Ð¹ ÐÐºÐ°Ð¸ÐºÐµ
+summary(aic.uv$best.model)# ÑÑ‚Ð°Ñ‚Ð¸ÑÑ‚Ð¸ÐºÐ¸ Ð¿Ð¾ Ð¼Ð¾Ð´ÐµÐ»Ð¸
+aic.uv <-stepAIC.ghyp(r3,dist=c("gauss","t","ghyp"),symmetric=NULL,silent=TRUE)#ÐºÑ€Ð¸Ñ‚ÐµÑ€Ð¸Ð¹ ÐÐºÐ°Ð¸ÐºÐµ
+summary(aic.uv$best.model)# ÑÑ‚Ð°Ñ‚Ð¸ÑÑ‚Ð¸ÐºÐ¸ Ð¿Ð¾ Ð¼Ð¾Ð´ÐµÐ»Ð¸
