@@ -1,3 +1,3 @@
 # cmf-data-analysis
 
-This repository contains my homework projects for CMF-2016
+This repository contains the homework projects for CMF-2016
